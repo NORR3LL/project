@@ -5,3 +5,5 @@ PIL
 matplotlib
 torchvision
 shutil
+time
+torch

@@ -1,0 +1,7 @@
+pillow
+streamlit
+zipfile
+PIL
+matplotlib
+torchvision
+shutil

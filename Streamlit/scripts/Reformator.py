@@ -23,23 +23,34 @@ def augment_images(target_size=(256, 256)):
         transforms.RandomRotation(10),
     ])
 
-    for subdir, _, files in os.walk('outputs\\Bronze\\content\\lung_ct_augmented'):
+    for subdir, _, files in os.walk('outputs\\Silver'):
+        #ignore the test folder
         for file_name in files:
             if file_name.lower().endswith(('.jpg', '.jpeg', '.png')):
                 #replace Bronze in subdir to Silver
                 file_path = os.path.join(subdir, file_name)
-                save_subdir= subdir.replace('Bronze', 'Silver')
+                save_subdir= subdir.replace('Silver', 'Gold')
                 save_path= os.path.join(save_subdir, file_name)
                 try:
                     if not os.path.exists(save_subdir):
                         os.makedirs(save_subdir)
+                        
+                    if 'test' in subdir:
+                        with Image.open(file_path) as img:
+                            if img.mode != 'L':
+                                img = img.convert('L')
+                            img = img.resize(target_size, Image.LANCZOS)  # resize
+                            img.save(save_path)  # save processed image
+                            print(f'Processed {file_path}')
 
-                    with Image.open(file_path) as img:
-                        if img.mode != 'L':  # if it is not grey
-                            img = img.convert('L')  # grey
-                        img = img.resize(target_size, Image.LANCZOS)  # resize
-                        img = augmentation_transforms(img)
-                        img.save(save_path)  # save processed image
+                    else:
+                        with Image.open(file_path) as img:
+                            if img.mode != 'L':  # if it is not grey
+                                img = img.convert('L')  # grey
+                            img = img.resize(target_size, Image.LANCZOS)  # resize
+                            img = augmentation_transforms(img)
+                            img.save(save_path)  # save processed image
+                            print(f'Processed {file_path}')
 
                 except Exception as e:
                     st.error(f"Error processing {file_path}: {e}")
@@ -48,11 +59,11 @@ def augment_images(target_size=(256, 256)):
 
 # Function to split and copy images
 def split_data(train_split, val_split, test_split):
-    source = r'outputs\Silver\content\lung_ct_augmented'
+    source = r'outputs\Bronze\content\lung_ct_augmented'
     target_dirs = {
-        "train": r'outputs\Gold\train',
-        "val": r'outputs\Gold\val',
-        "test": r'outputs\Gold\test'
+        "train": r'outputs\Silver\train',
+        "val": r'outputs\Silver\val',
+        "test": r'outputs\Silver\test'
     }
 
     # Parameters for splitting

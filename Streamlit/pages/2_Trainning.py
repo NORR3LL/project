@@ -173,3 +173,5 @@ with tab2:
             end_time = time.time()
             duration = (end_time - start_time) / 60
             st.info(f"Evaluation Duration: {duration:.2f} minutes.")
+
+            

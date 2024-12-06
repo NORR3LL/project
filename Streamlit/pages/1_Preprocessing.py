@@ -84,8 +84,20 @@ if submit:
             st.write('✨ Images resized. Starting augmentation...')
             augment_images()
 
-
             st.success('✅ Images successfully split.')
+
+        #show the number of files in each bronze folder
+        st.write('📂 Bronze Folder Structure:')
+
+        file_density= []
+        for folder in os.listdir('outputs/Bronze/content/lung_ct_augmented'):
+            #count the number of files in each folder
+            file_density.append(len(os.listdir(f'outputs/Bronze/content/lung_ct_augmented/{folder}')))
+
+        #create a dataframe to display the number of files in each folder
+        df= pd.DataFrame(file_density, columns=['Number of Files'])
+
+
 
     except Exception as e:
         st.error(f"❌ An error occurred: {e}")
